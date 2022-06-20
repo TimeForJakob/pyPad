@@ -2,4 +2,4 @@
 
 ## Introduction
 
-pyPad is (hopefully lol) going to be a file based notes app coded in python.
+pyPad is (hopefully going to be lol) a file based notes app coded in python.
