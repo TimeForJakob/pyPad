@@ -1,3 +1,6 @@
-# notes folder; created by the app
-my-notes/
+# created by the app
+my-notes/ # folder for saved notes
+config.json # created by the app; customizable
+
+# default git folder
 .git/

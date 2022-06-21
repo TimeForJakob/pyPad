@@ -1,4 +1,5 @@
 import os
+import json
 
 print('-----------------')
 print('| pyPad - Notes |')
@@ -6,17 +7,39 @@ print('-----------------\n')
 
 # constants
 ###########
-notesDir = './my-notes/'
-userEditor = 'nano'
-notesFormat = '.md'
+
+#notesDir = './my-notes/'  |
+#userEditor = 'nano'       | possible customizations (+default values)
+#notesFormat = '.md'       |
+
+if os.path.exists('config.json'):
+    with open('config.json', 'r') as configFile:
+        config = json.load(configFile)
+
+        notesDir = config['notesDir']
+        userEditor = config['userEditor']
+        notesFormat = config['notesFormat']
+else:
+    with open('config.json', 'w') as configFile:
+            config = {
+                    "notesDir": "./my-notes/",
+                    "userEditor": "nano",
+                    "notesFormat": ".md"
+                    }
+            json.dump(config, configFile)
+            
+            notesDir = config['notesDir']
+            userEditor = config['userEditor']
+            notesFormat = config['notesFormat']
+
+# TODO: remove dev-prints
+print('config values: ')
+print(notesDir)
+print(userEditor)
+print(notesFormat)
 
 # functions
 ###########
-def openFile(editor, filenamePrompt):
-    filename = input(filenamePrompt) + notesFormat
-    os.system(editor + ' ' + notesDir + filename)
-    return
-
 def displayMenu():
     print('\nWhat can i do for you?')
     print('1 | new note \n2 | open note \n3 | delete note\n0 | quit\n')
@@ -50,8 +73,8 @@ def displayMenu():
     else:
         return
 
-# main code
-###########
+# main
+#######
 
 # fetch all notes (or create dir on first use)
 try:
@@ -66,6 +89,7 @@ while True:
     # print all notes
     print('-\nyour current notes: \n')
 
+    # print the note's names (or no notes message)
     if len(noteList) > 0:
         for item in noteList:
             print('[] ' + item[0:item.find(notesFormat)])
@@ -74,7 +98,7 @@ while True:
         print('   no notes yet   ')
         print('-')
 
-    # user interface
+    # spawn user interface
     displayMenu()
 
     # fetch noteList again after user interaction
