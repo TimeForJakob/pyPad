@@ -3,45 +3,59 @@ import json
 
 print('-----------------')
 print('| pyPad - Notes |')
-print('-----------------\n')
+print('-----------------')
 
 # constants
 ###########
 
-#notesDir = './my-notes/'  |
-#userEditor = 'nano'       | possible customizations (+default values)
-#notesFormat = '.md'       |
+# directory for notes
+notesDir = '' # def: './my-notes/'
 
-if os.path.exists('config.json'):
-    with open('config.json', 'r') as configFile:
-        config = json.load(configFile)
+# editor for editing notes
+userEditor = '' # def: 'nano'
 
-        notesDir = config['notesDir']
-        userEditor = config['userEditor']
-        notesFormat = config['notesFormat']
-else:
-    with open('config.json', 'w') as configFile:
+# file format for notes
+notesFormat = '' # def: '.md'
+
+# default content written into file when newly created
+defaultContent = '' # def: '[//]: # "Feel free to use Markdown!"'
+
+
+# functions
+###########
+def setupConfig():
+    # accessing global constants
+    global notesDir
+    global userEditor
+    global notesFormat
+    global defaultContent
+
+    if os.path.exists('config.json'):
+        with open('config.json', 'r') as configFile:
+            config = json.load(configFile)
+
+            notesDir = config['notesDir']
+            userEditor = config['userEditor']
+            notesFormat = config['notesFormat']
+            defaultContent = config['defaultContent']
+
+    else:
+        with open('config.json', 'w') as configFile:
             config = {
                     "notesDir": "./my-notes/",
                     "userEditor": "nano",
-                    "notesFormat": ".md"
+                    "notesFormat": ".md",
+                    "defaultContent": '[//]: # "Feel free to use Markdown!"'
                     }
             json.dump(config, configFile)
             
             notesDir = config['notesDir']
             userEditor = config['userEditor']
             notesFormat = config['notesFormat']
+            defaultContent = config['defaultContent']
 
-# TODO: remove dev-prints
-print('config values: ')
-print(notesDir)
-print(userEditor)
-print(notesFormat)
-
-# functions
-###########
 def displayMenu():
-    print('\nWhat can i do for you?')
+    print('\nwhat can i do for you?')
     print('1 | new note \n2 | open note \n3 | delete note\n0 | quit\n')
     userChoice = input('Choice: ')
 
@@ -51,30 +65,55 @@ def displayMenu():
         while noteList.count(filename) > 0:
             filename = input('Note already exists! Try different Title: ') + notesFormat
 
+        os.system('echo \'' + defaultContent + '\' >> ' + notesDir + filename)
         os.system(userEditor + ' ' + notesDir + filename)
         return
 
     elif userChoice == '2':
-        filename = input('Name: ') + notesFormat
-        while noteList.count(filename) == 0:
-            filename = input('Note does not exist! Name: ') + notesFormat
+        if len(noteList) > 0:
+            indexInput = input('Nr.: ')
 
-        os.system(userEditor + ' ' + notesDir + filename)
+            while not indexInput.isdigit() or indexInput.isdigit() and int(indexInput) > (len(noteList) - 1):
+                indexInput = input('Invalid input! Nr.: ')
+
+            os.system(userEditor + ' ' + notesDir + noteList[int(indexInput)])
+
+        else:
+            print('You have no notes yet!')
+            input('press <return> to continue...')
         return
+
     elif userChoice == '3':
-        filename = input('Name: ') + notesFormat
-        while noteList.count(filename) == 0:
-            filename = input('Note does not exist! Name: ') + notesFormat
+        if len(noteList) > 0:
+            indexInput = input('Nr.: ')
 
-        os.remove(notesDir + filename)
+            while not indexInput.isdigit() or indexInput.isdigit() and int(indexInput) > (len(noteList) - 1):
+                indexInput = input('Invalid input! Nr.: ')
+
+            os.remove(notesDir + noteList[int(indexInput)])
+        else:
+            print('You have no notes yet!')
+            input('press <return> to continue...')
         return
+
     elif userChoice == '0':
         exit(0)
+
     else:
         return
 
 # main
 #######
+
+# setup config
+setupConfig()
+
+# TODO: remove dev-prints
+#print('config values: ')
+#print(notesDir)
+#print(userEditor)
+#print(notesFormat)
+#print(defaultContent)
 
 # fetch all notes (or create dir on first use)
 try:
@@ -87,12 +126,13 @@ except FileNotFoundError:
 while True:
 
     # print all notes
-    print('-\nyour current notes: \n')
+    print('\nyour current notes: ')
+    print('-------------------')
 
     # print the note's names (or no notes message)
     if len(noteList) > 0:
-        for item in noteList:
-            print('[] ' + item[0:item.find(notesFormat)])
+        for i, noteItem in enumerate(noteList):
+            print('[' + str(i) + '] ' + noteItem[0:noteItem.find(notesFormat)])
         print('-')
     else:
         print('   no notes yet   ')
