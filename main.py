@@ -108,13 +108,6 @@ def displayMenu():
 # setup config
 setupConfig()
 
-# TODO: remove dev-prints
-#print('config values: ')
-#print(notesDir)
-#print(userEditor)
-#print(notesFormat)
-#print(defaultContent)
-
 # fetch all notes (or create dir on first use)
 try:
     noteList = os.listdir(path=notesDir)
