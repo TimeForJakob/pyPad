@@ -2,5 +2,8 @@
 my-notes/ # folder for saved notes
 config.json # created by the app; customizable
 
+# python stuff
+__pycache__/
+
 # default git folder
 .git/
