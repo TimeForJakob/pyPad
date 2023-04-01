@@ -1,6 +1,9 @@
+# mac stuff
+.DS_Store
+
 # created by the app
-my-notes/ # folder for saved notes
-config.json # created by the app; customizable
+my-notes/
+config.json
 
 # python stuff
 __pycache__/
