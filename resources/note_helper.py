@@ -107,6 +107,7 @@ class NoteHelper():
             return
     
         elif userChoice == '0':
+            print('see you! :)')
             exit(0)
     
         else:
