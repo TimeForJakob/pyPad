@@ -8,7 +8,7 @@ pyPad is an in-terminal, file based notes app coded in python.
 
 To install the app, just clone this repository using:  
 
-    git clone https://gitlab.com/timeforjakob/pypad
+    git clone https://github.com/timeforjakob/pypad
 
 To open the app, just switch into the cloned repository and start the app via:
 
